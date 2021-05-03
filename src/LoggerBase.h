@@ -36,6 +36,10 @@
 #include <avr/power.h>
 #include <avr/sleep.h>
 #include "WatchDogs/WatchDogAVR.h"
+#elif defined(ARDUINO_ARCH_ESP8266)
+#include "WatchDogs/WatchDogESP8266.h"
+#elif defined(ARDUINO_ARCH_ESP32)
+#include "WatchDogs/WatchDogESP32.h"
 #endif
 
 // Bring in the library to communicate with an external high-precision real time
@@ -773,19 +777,24 @@ class Logger {
      */
     void systemSleep(void);
 
+    /**
+     * @brief A watch-dog implementation to use to reboot the system in case of
+     * lock-ups
+     */
 #if defined(ARDUINO_ARCH_SAMD)
-    /**
-     * @brief A watch-dog implementation to use to reboot the system in case of
-     * lock-ups
-     */
     extendedWatchDogSAMD watchDogTimer;
-#else
-    /**
-     * @brief A watch-dog implementation to use to reboot the system in case of
-     * lock-ups
-     */
+
+#elif defined(ARDUINO_ARCH_AVR)
     extendedWatchDogAVR watchDogTimer;
+
+#elif defined(ARDUINO_ARCH_ESP8266)
+    extendedWatchDogESP8266 watchDogTimer;
+
+#elif defined(ARDUINO_ARCH_ESP32)
+    extendedWatchDogESP32 watchDogTimer;
+
 #endif
+
     /**@}*/
 
     // ===================================================================== //
