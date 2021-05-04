@@ -45,14 +45,18 @@ float AnalogElecConductivity::readEC(uint8_t analogPinNum) {
     float    Rwater_ohms;      // literal value of water
     float    EC_uScm = -9999;  // units are uS per cm
 
+#if defined(ARDUINO_ARCH_SAMD)
     // Set the resolution for the processor ADC, only applies to SAMD boards.
-#if !defined ARDUINO_ARCH_AVR
     analogReadResolution(ANALOG_EC_ADC_RESOLUTION);
-#endif  // ARDUINO_ARCH_AVR
+#elif defined(ARDUINO_ARCH_AVR)
+    // ARDUINO_ARCH_AVR
     // Set the analog reference mode for the voltage measurement.
     // If possible, to get the best results, an external reference should be
     // used.
     analogReference(ANALOG_EC_ADC_REFERENCE_MODE);
+#elif defined(ARDUINO_ARCH_ESP8266)
+#elif defined(ARDUINO_ARCH_ESP32)
+#endif
 
     // First measure the analog voltage.
     // The return value from analogRead() is IN BITS NOT IN VOLTS!!
