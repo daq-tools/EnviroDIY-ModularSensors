@@ -9,6 +9,16 @@
 
 #include "ThingSpeakPublisher.h"
 
+// ESP8266 compatibility
+// https://github.com/RobTillaart/Arduino/issues/128#issuecomment-527349364
+#if defined(ESP8266) || defined(ESP32)
+#ifndef PREFIX
+#  define RENAME(f)
+#else
+#  define RENAME(f) PREFIX ## f
+#endif
+#define min RENAME(_min)
+#endif
 
 // ============================================================================
 //  Functions for the EnviroDIY data portal receivers.
