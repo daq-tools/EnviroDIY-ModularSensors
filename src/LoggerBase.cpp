@@ -21,6 +21,17 @@
 // For all i2c communication, including with the real time clock
 #include <Wire.h>
 
+// ESP32S2 compatibility
+// Mitigate "error: call of overloaded 'abs(uint32_t)' is ambiguous"
+#if defined(ESP32)
+#ifndef PREFIX
+#  define RENAME(f)
+#else
+#  define RENAME(f) PREFIX ## f
+#endif
+#define abs RENAME(labs)
+#endif
+
 
 // Initialize the static timezone
 int8_t Logger::_loggerTimeZone = 0;
@@ -489,6 +500,37 @@ void Logger::setNowEpoch(uint32_t ts) {
     zero_sleep_rtc.setEpoch(ts);
 }
 
+#elif defined ARDUINO_ARCH_ESP8266
+#include <time.h>
+uint32_t Logger::getNowEpoch(void) {
+    uint32_t currentEpochTime = time(nullptr);
+    // Do NOT apply an offset if the timestamp is obviously bad
+    if (isRTCSane(currentEpochTime))
+        currentEpochTime += ((uint32_t)_loggerRTCOffset) * 3600;
+    return currentEpochTime;
+}
+void Logger::setNowEpoch(uint32_t ts) {
+    // https://github.com/esp8266/Arduino/issues/4637#issuecomment-384613590
+    timeval tv = { ts, 0 };
+    timezone tz = { 0, 0 };
+    settimeofday(&tv, &tz);
+}
+
+#elif defined ARDUINO_ARCH_ESP32
+// https://www.arduinolibraries.info/libraries/esp32-time
+// https://platformio.org/lib/show/11703/ESP32Time/examples
+#include <ESP32Time.h>
+ESP32Time rtc;
+uint32_t Logger::getNowEpoch(void) {
+    uint32_t currentEpochTime = rtc.getEpoch();
+    // Do NOT apply an offset if the timestamp is obviously bad
+    if (isRTCSane(currentEpochTime))
+        currentEpochTime += ((uint32_t)_loggerRTCOffset) * 3600;
+    return currentEpochTime;
+}
+void Logger::setNowEpoch(uint32_t ts) {
+    rtc.setTime(ts);
+}
 #endif
 
 // This converts the current UNIX timestamp (ie, the number of seconds
