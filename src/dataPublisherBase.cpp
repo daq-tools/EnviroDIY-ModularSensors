@@ -97,7 +97,7 @@ int dataPublisher::bufferFree(void) {
 void dataPublisher::printTxBuffer(Stream* stream, bool addNewLine) {
 // Send the out buffer so far to the serial for debugging
 #if defined(STANDARD_SERIAL_OUTPUT)
-    STANDARD_SERIAL_OUTPUT.write(txBuffer, strlen(txBuffer));
+    STANDARD_SERIAL_OUTPUT.write(String(txBuffer).c_str());
     if (addNewLine) { PRINTOUT('\n'); }
     STANDARD_SERIAL_OUTPUT.flush();
 #endif

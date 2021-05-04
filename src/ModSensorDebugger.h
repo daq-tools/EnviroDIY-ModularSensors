@@ -31,6 +31,8 @@
 #define STANDARD_SERIAL_OUTPUT SERIAL_PORT_USBVIRTUAL
 #elif defined __AVR__ || defined ARDUINO_ARCH_AVR
 #define STANDARD_SERIAL_OUTPUT Serial
+#elif defined ARDUINO_ARCH_ESP8266 || defined ARDUINO_ARCH_ESP32
+#define STANDARD_SERIAL_OUTPUT Serial
 #endif
 #endif  // ifndef STANDARD_SERIAL_OUTPUT
 
