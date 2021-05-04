@@ -44,7 +44,9 @@
 
 // Bring in the library to communicate with an external high-precision real time
 // clock This also implements a needed date/time class
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD)
 #include <Sodaq_DS3231.h>
+#endif
 
 /**
  * @brief January 1, 2000 00:00:00 in "epoch" time

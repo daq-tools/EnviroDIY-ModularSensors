@@ -463,7 +463,7 @@ int8_t Logger::getTZOffset(void) {
 
 // This gets the current epoch time (unix time, ie, the number of seconds
 // from January 1, 1970 00:00:00 UTC) and corrects it to the specified time zone
-#if defined MS_SAMD_DS3231 || not defined ARDUINO_ARCH_SAMD
+#if defined MS_SAMD_DS3231 || defined ARDUINO_ARCH_AVR
 
 uint32_t Logger::getNowEpoch(void) {
     uint32_t currentEpochTime = rtc.now().getEpoch();
@@ -715,7 +715,7 @@ void Logger::systemSleep(void) {
         return;
     }
 
-#if defined MS_SAMD_DS3231 || not defined ARDUINO_ARCH_SAMD
+#if defined MS_SAMD_DS3231 || defined ARDUINO_ARCH_AVR
 
     // Unfortunately, because of the way the alarm on the DS3231 is set up, it
     // cannot interrupt on any frequencies other than every second, minute,
@@ -749,6 +749,12 @@ void Logger::systemSleep(void) {
     zero_sleep_rtc.attachInterrupt(wakeISR);
     zero_sleep_rtc.setAlarmSeconds(59);
     zero_sleep_rtc.enableAlarm(zero_sleep_rtc.MATCH_SS);
+
+#elif defined ARDUINO_ARCH_ESP8266
+#warning "Setting alarm on RTC not implemented for ESP8266 yet"
+
+#elif defined ARDUINO_ARCH_ESP32
+#warning "Setting alarm on RTC not implemented for ESP32 yet"
 
 #endif
 
@@ -917,7 +923,8 @@ void Logger::systemSleep(void) {
     // the timeout period is a useless delay.
     Wire.setTimeout(0);
 
-#if defined MS_SAMD_DS3231 || not defined ARDUINO_ARCH_SAMD
+// Disable RTC alarms
+#if defined MS_SAMD_DS3231 || defined ARDUINO_ARCH_AVR
     // Stop the clock from sending out any interrupts while we're awake.
     // There's no reason to waste thought on the clock interrupt if it
     // happens while the processor is awake and doing other things.
@@ -927,6 +934,13 @@ void Logger::systemSleep(void) {
 
 #elif defined ARDUINO_ARCH_SAMD
     zero_sleep_rtc.disableAlarm();
+
+#elif defined ARDUINO_ARCH_ESP8266
+#warning "Disabling alarms on RTC not implemented for ESP8266 yet"
+
+#elif defined ARDUINO_ARCH_ESP32
+#warning "Disabling alarms on RTC not implemented for ESP32 yet"
+
 #endif
 
     // Wake-up message
@@ -1437,7 +1451,7 @@ void Logger::begin() {
     // the timeout period is a useless delay.
     Wire.setTimeout(0);
 
-#if defined MS_SAMD_DS3231 || not defined ARDUINO_ARCH_SAMD
+#if defined MS_SAMD_DS3231 || defined ARDUINO_ARCH_AVR
     if (_mcuWakePin < 0) {
         MS_DBG(F("Logger mcu will not sleep between readings!"));
     } else {
@@ -1446,6 +1460,13 @@ void Logger::begin() {
     }
     MS_DBG(F("Beginning DS3231 real time clock"));
     rtc.begin();
+
+#elif defined ARDUINO_ARCH_ESP8266
+#warning "Beginning RTC not implemented for ESP8266 yet"
+
+#elif defined ARDUINO_ARCH_ESP32
+#warning "Beginning RTC not implemented for ESP32 yet"
+
 #endif
     watchDogTimer.resetWatchDog();
 

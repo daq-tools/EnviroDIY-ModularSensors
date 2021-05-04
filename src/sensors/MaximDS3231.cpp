@@ -7,7 +7,9 @@
  * @brief Implements the MaximDS18 class.
  */
 
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD)
 #include <Sodaq_DS3231.h>
+#endif
 #include "MaximDS3231.h"
 
 // Only input is the number of readings to average
@@ -24,15 +26,18 @@ String MaximDS3231::getSensorLocation(void) {
 
 
 bool MaximDS3231::setup(void) {
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD)
     rtc.begin();  // NOTE:  This also turns off interrupts on the RTC!
     return Sensor::setup();  // this will set pin modes and the setup status bit
     // The clock should be continuously powered, so we never need to worry about
     // power up
+#endif
 }
 
 
 // Sending the device a request to start temp conversion.
 bool MaximDS3231::startSingleMeasurement(void) {
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD)
     // Sensor::startSingleMeasurement() checks that if it's awake/active and
     // sets the timestamp and status bits.  If it returns false, there's no
     // reason to go on.
@@ -46,10 +51,12 @@ bool MaximDS3231::startSingleMeasurement(void) {
     rtc.convertTemperature(false);
 
     return true;
+#endif
 }
 
 
 bool MaximDS3231::addSingleMeasurementResult(void) {
+#if defined(ARDUINO_ARCH_AVR) || defined(ARDUINO_ARCH_SAMD)
     // get the temperature value
     MS_DBG(getSensorNameAndLocation(), F("is reporting:"));
     float tempVal = rtc.getTemperature();
@@ -64,4 +71,5 @@ bool MaximDS3231::addSingleMeasurementResult(void) {
 
     // Return true when finished
     return true;
+#endif
 }
