@@ -771,10 +771,15 @@ void Logger::systemSleep(void) {
     DEBUGGING_SERIAL_OUTPUT.flush();  // for debugging
 #endif
 
+// ESP8266 compatibility
+// Mitigate "error: 'class TwoWire' has no member named 'end'"
+#if not (defined(ARDUINO_ARCH_ESP8266) || defined(ARDUINO_ARCH_ESP32))
     // Stop any I2C connections
     // This function actually disables the two-wire pin functionality and
     // turns off the internal pull-up resistors.
     Wire.end();
+#endif
+
 // Now force the I2C pins to LOW
 // I2C devices have a nasty habit of stealing power from the SCL and SDA pins...
 // This will only work for the "main" I2C/TWI interface
