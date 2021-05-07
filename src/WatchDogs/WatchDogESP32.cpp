@@ -18,10 +18,9 @@
 // link all .cpp files regardless of platform.
 #if defined(ESP32)
 
-#include "esp_system.h"
-
-
-void ARDUINO_ISR_ATTR resetModule() {
+// FIXME: This currently croaks with "error: expected initializer before".
+//void ARDUINO_ISR_ATTR resetModule() {
+void resetModule() {
   ets_printf("WDT: Reboot\n");
   esp_restart();
 }
