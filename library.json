@@ -309,6 +309,17 @@
       "authors": ["Sara Damiano", "Anthony Aufdenkampe"],
       "frameworks": "arduino",
       "platforms": "atmelavr, atmelsam"
+    },
+    {
+      "name": "ESP32Time",
+      "owner": "fbiego",
+      "library id": "11703",
+      "url": "https://github.com/fbiego/ESP32Time.git",
+      "version": "~1.0.3",
+      "note": "An Arduino library for setting and retrieving internal RTC time on ESP32 boards",
+      "authors": ["Felix Biego"],
+      "frameworks": "arduino",
+      "platforms": "espressif32"
     }
   ]
 }
