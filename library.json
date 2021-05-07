@@ -318,7 +318,8 @@
       "version": "~1.0.3",
       "note": "An Arduino library for setting and retrieving internal RTC time on ESP32 boards",
       "authors": ["Felix Biego"],
-      "frameworks": "arduino"
+      "frameworks": "arduino",
+      "platforms": "espressif8266, espressif32"
     }
   ]
 }
