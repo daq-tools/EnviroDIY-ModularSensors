@@ -3,7 +3,7 @@
   "version": "0.28.3",
   "description": "A library that allows access to multiple sensors through a unified interface.  This allows the user to simply access many sensors to log the data or send the data to data repositories like the EnviroDIY data portal.",
   "keywords": "modular, sensor, sensors, datalogger, logger, low power, sleeping, EnviroDIY, ModularSensors, Mayfly, WikiWatershed, Monitor My Watershed, ThingSpeak",
-  "platforms": "atmelavr, atmelsam",
+  "platforms": "atmelavr, atmelsam, espressif32",
   "frameworks": "arduino",
   "authors": [
     {
@@ -318,8 +318,7 @@
       "version": "~1.0.3",
       "note": "An Arduino library for setting and retrieving internal RTC time on ESP32 boards",
       "authors": ["Felix Biego"],
-      "frameworks": "arduino",
-      "platforms": "espressif32"
+      "frameworks": "arduino"
     }
   ]
 }
